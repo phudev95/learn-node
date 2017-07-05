@@ -30,6 +30,7 @@ exports.notFound = (req, res, next) => {
 */
 
 exports.flashValidationErrors = (err, req, res, next) => {
+  // if there are no errors to show for slashes, skip it
   if (!err.errors) return next(err);
   // validation errors look like
   const errorKeys = Object.keys(err.errors);
@@ -46,6 +47,7 @@ exports.flashValidationErrors = (err, req, res, next) => {
 exports.developmentErrors = (err, req, res, next) => {
   err.stack = err.stack || '';
   const errorDetails = {
+    title: err.message,
     message: err.message,
     status: err.status,
     stackHighlighted: err.stack.replace(/[a-z_-\d]+.js:\d+:\d+/gi, '<mark>$&</mark>')
@@ -55,7 +57,9 @@ exports.developmentErrors = (err, req, res, next) => {
     // Based on the `Accept` http header
     'text/html': () => {
       res.render('error', errorDetails);
-    }, // Form Submit, Reload the page
+    },
+
+    // Form Submit, Reload the page
     'application/json': () => res.json(errorDetails) // Ajax call, send JSON back
   });
 };

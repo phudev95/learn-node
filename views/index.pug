@@ -1,0 +1,6 @@
+extends layout
+
+block content
+  h1 Hello world
+  h2 Sale ends in #{h.moment().endOf('day').fromNow()}
+  != h.dump(h.moment().endOf('day'))
